@@ -7,6 +7,7 @@ from datetime import datetime
 
 
 class Yams:
+    # Constructeur de la partie : Créé la grille de jeu et affiche message de bienvenue
     def __init__(self):
         self.grille = {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "Brelan": 0,
                        "Carré": 0, "Full": 0, "Petite suite": 0, "Grande suite": 0, "Yam's": 0, "Chance": 0}
@@ -18,15 +19,18 @@ class Yams:
         print("║ └──────────────────────────────────────────────────────┘ ║")
         self.home()
 
+    # Affiche nb saut de ligne en gardant l'affichage du cadre du jeu
     def espace(self, nb=1):
         for i in range(nb):
             print("║                                                          ║")
 
+    # Afficher une divider avec nb espace à la suite
     def divider(self, nb=2):
         self.espace(2)
         print("╠══════════════════════════════════════════════════════════╣")
         self.espace(nb)
 
+    # Menu du jeu
     def home(self):
         self.divider()
         print("║ ┌──────────────────────── MENU ────────────────────────┐ ║")
@@ -51,8 +55,10 @@ class Yams:
             print("║ Au revoir ...                                            ║")
             print("╚══════════════════════════════════════════════════════════╝")
 
+    # Lancement partie
     def game(self):
         cpt = 1
+        # Lance un tour tant que la partie n'est pas terminée
         while self.verifEnd() == False:
             print("║ MANCHE", str(cpt).ljust(49), "║")
             self.espace()
@@ -69,6 +75,7 @@ class Yams:
         self.espace()
         print("╚══════════════════════════════════════════════════════════╝")
 
+    # Affichage des règles
     def rules(self):
         print("║ ┌─────────────────────── REGLES ───────────────────────┐ ║")
         print("║ │                                                      │ ║")
@@ -113,6 +120,7 @@ class Yams:
         input("║  Tapez sur 'Entrée' pour quitter ... ")
         self.home()
 
+    # Affichage du score
     def showScore(self):
         print("║ ┌─────────────────────── SCORES ───────────────────────┐ ║")
         print("║ │                                                      │ ║")
@@ -131,6 +139,7 @@ class Yams:
         input("║  Tapez sur 'Entrée' pour quitter ... ")
         self.home()
 
+    # Sauvegarde du score dans le fichier 'score.txt'
     def saveScore(self, name, score):
         check = False
         for line in fileinput.input("score.txt", inplace=1):
@@ -147,6 +156,7 @@ class Yams:
                        datetime.today().strftime('%d-%m-%Y')+"\n")
             file.close()
 
+    # Retourne 0 si le combo contenu dans 'choix' est possible, sinon renvoie 0
     def verifPossible(self, choix):
         self.listeDe.sort()
         if choix in [str(i) for i in self.listeDe]:
@@ -202,6 +212,7 @@ class Yams:
                 return 0
             return -1
 
+    # Compte s'il y a une occurrence de 'nbOcc' de n'importe quelle valeur
     def testNbOccurrence(self, nbOcc):
         test = self.listeDe[0]
         cpt = 1
@@ -215,6 +226,7 @@ class Yams:
                 return 0
         return -1
 
+    # Affiche le résultat du lancer dé
     def showDice(self):
         self.listeDe.sort()
         print(
@@ -223,6 +235,7 @@ class Yams:
             print("", i, end=" │")
         print("\n║    └───┴───┴───┴───┴───┘                                 ║")
 
+    # Lancer de dé, avec demande de relance
     def diceRoll(self):
         self.listeDe = []
         print("║ Voici votre lancé de dé :                                ║")
@@ -241,6 +254,7 @@ class Yams:
             print("║ Voici votre nouveau lancé de dé :                        ║")
             self.showDice()
 
+    # Affiche la grille de score
     def showGrid(self):
         chiffre = []
         combo = []
@@ -275,6 +289,7 @@ class Yams:
         print("║ └──────────────────────────────────────────────────────┘ ║")
         self.espace()
 
+    # Gestion de la question du choix du combo
     def questionChoice(self):
         choix = 0
         dico = self.possibleChoice()
@@ -289,6 +304,7 @@ class Yams:
             choix = int(input("║ --> Entrez votre choix : "))
         self.updatePoint(dico[choix])
 
+    # Gestion de la demande de suppression de combo
     def deleteCombination(self):
         choix = 0
         dico = {}
@@ -305,6 +321,7 @@ class Yams:
             choix = int(input("║ Entrez votre choix : "))
         self.grille[dico[choix]] = "XXXXX"
 
+    # Affiche les choix de combo possible
     def possibleChoice(self):
         dico = {}
         cpt = 1
@@ -314,6 +331,7 @@ class Yams:
                 cpt += 1
         return dico
 
+    # Calcul le total des scores
     def totalCalcul(self):
         self.total[0] = 0
         self.total[1] = 0
@@ -329,12 +347,14 @@ class Yams:
 
         self.total[2] = self.total[0] + self.total[1]
 
+    # Vérifie si la partie est terminé
     def verifEnd(self):
         for value in self.grille.values():
             if value == 0:
                 return False
         return True
 
+    # Met à jour les scores la grille
     def updatePoint(self, choix):
         score = 0
         if choix in "123456":
@@ -354,4 +374,5 @@ class Yams:
         self.totalCalcul()
 
 
+# Création de la partie
 partie = Yams()
